@@ -72,40 +72,54 @@ def expand_string_range(
     Expands a string of numbers and ranges into a list, set, or CSV string of integers.
 
     This function handles all scenarios including custom delimiters, steps, reversed ranges,
-    and different output formats.
+    and different output formats. It includes error handling for invalid parts.
 
     Args:
         input_string: The string to expand.
         output_format: The desired output format ('list', 'set', or 'csv').
 
     Returns:
-        The expanded sequence in the specified format, or None if the input is None.
+        The expanded sequence in the specified format, or None if the input is None or invalid.
     """
     if input_string is None:
         return None
     
-    # Stage 2: Ignore Whitespace and Empty Parts
-    parts = [part.strip() for part in input_string.split(",") if part.strip()]
-    
     all_numbers = set()
+    try:
+        print("Starting range expansion process...")
+        # Stage 2: Ignore Whitespace and Empty Parts
+        parts = [part.strip() for part in input_string.split(",") if part.strip()]
+        
+        for part in parts:
+            try:
+                start, end, step = _parse_part(part)
 
-    for part in parts:
-        start, end, step = _parse_part(part)
+                # Stage 4: Handle Reversed Ranges
+                if start > end:
+                    # Generate numbers in descending order
+                    all_numbers.update(range(start, end - 1, -step))
+                else:
+                    # Generate numbers in ascending order
+                    all_numbers.update(range(start, end + 1, step))
+            except ValueError as e:
+                print(f"Warning: Skipping invalid part '{part}'. Reason: {e}")
 
-        # Stage 4: Handle Reversed Ranges
-        if start > end:
-            # Generate numbers in descending order
-            all_numbers.update(range(start, end - 1, -step))
-        else:
-            # Generate numbers in ascending order
-            all_numbers.update(range(start, end + 1, step))
+        return _format_output(all_numbers, output_format)
 
-    return _format_output(all_numbers, output_format)
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        return None
+    finally:
+        print("Range expansion process finished.")
+
 
 if __name__ == '__main__':
-    print("Output: ", expand_string_range("1-3,5,7-9","csv"))
     # Example usages demonstrating various scenarios
-    # print(f"Scenario: Basic Expansion")
-    # print(f"'1-3,5,7-9' -> {expand_string_range('1-3,5,7-9')}\n")
+    print("\n--- Scenario: Basic Expansion ---")
+    print(f"Input: '1-3,5,7-9', Output: {expand_string_range('1-3,5,7-9')}")
 
-   
+    print("\n--- Scenario: Invalid Input Handling ---")
+    print(f"Input: '1-a,2,4-b,5', Output: {expand_string_range('1-a,2,4-b,5')}")
+
+    print("\n--- Scenario: CSV Output ---")
+    print(f"Input: '1-3,3-5', Output: {expand_string_range('1-3,3-5', output_format='csv')}")
