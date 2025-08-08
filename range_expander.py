@@ -108,22 +108,4 @@ if __name__ == '__main__':
     # print(f"Scenario: Basic Expansion")
     # print(f"'1-3,5,7-9' -> {expand_string_range('1-3,5,7-9')}\n")
 
-    # print(f"Scenario: Whitespace and Empty Parts")
-    # print(f"', 1-3,, 5' -> {expand_string_range(', 1-3,, 5')}\n")
-
-    # print(f"Scenario: Custom Delimiters (handled internally)")
-    # print(f"'1..3, 5~7, 10 to 12' -> {expand_string_range('1..3, 5~7, 10 to 12')}\n")
-
-    # print(f"Scenario: Reversed Range")
-    # print(f"'5-3' -> {expand_string_range('5-3')}\n")
-
-    # print(f"Scenario: Step Values")
-    # print(f"'1-10:2' -> {expand_string_range('1-10:2')}")
-    # print(f"'10-1:3' -> {expand_string_range('10-1:3')}\n")
-
-    # print(f"Scenario: Overlapping Ranges~ and Duplicates")
-    # print(f"'1-3,2-5' -> {expand_string_range('1-3,2-5')}\n")
-
-    # print(f"Scenario: Different Output Formats")
-    # print(f"'1-3,3-5' as csv -> {expand_string_range('1-3,3-5', output_format='csv')}")
-    # print(f"'1-3,3-5' as set -> {expand_string_range('1-3,3-5', output_format='set')}")
+   
